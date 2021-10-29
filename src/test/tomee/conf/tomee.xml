@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tomee>
+    <Resource id="ds" type="DataSource">
+        JdbcDriver org.hsqldb.jdbcDriver
+        JdbcUrl jdbc:hsqldb:hsql://localhost/xdb
+        UserName sa
+        Password
+        JtaManaged true
+    </Resource>
+</tomee>

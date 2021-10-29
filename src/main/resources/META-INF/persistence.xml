@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+   <persistence-unit name="prod" transaction-type="JTA">
+    <!--        <provider>org.hibernate.ejb.HibernatePersistence</provider> Does not exist in your version of hibernate !-->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <jta-data-source>ds</jta-data-source>
+    
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect"/>
+      <!-- 'update' is a nonstandard action, but Hibernate supports it -->
+      <!--       <property name="javax.persistence.schema-generation.database.action" value="update"/>  -->
+      <!--     <property name="hibernate.hbm2ddl.auto" value="create-drop"/>  -->
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
+      <!-- see: http://stackoverflow.com/q/40818396 AND http://stackoverflow.com/a/40843536 -->
+      <property name="tomee.jpa.cdi" value="false"/>
+    </properties>
+  </persistence-unit>
+</persistence>

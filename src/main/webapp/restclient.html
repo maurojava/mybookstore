@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="it">
+    <head>
+        <title>bookstore rest jQuery web app</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  -->
+
+        <script src="js/jquery/3.3.1/jquery.min.js"></script> 
+        <script type = "text/javascript">
+          var URL_BASE="http://localhost:8080";
+          
+            $(document).ready(function () {
+                getAllBooks();
+                
+                // Click handler for btnAddBook
+                $('#btnAddBook').click(function () {
+                    
+                    // Get the form fields and store them in an object
+                    var book = {"title":$('#txtTitle').val(), "author":$('#txtAuthor').val()};
+                    
+                    // Send the JSON string of book to the POST method of the web service
+                    $.ajax({
+                        url: "/mybookstore/webresources/book",
+                        method: "POST",
+                        data: JSON.stringify(book),
+                        contentType: "application/json; charset=utf-8",
+                        processData: false,
+                        success: function () {
+                            alert('Saved successfully');
+                            getAllBooks();
+                            reset();
+                        },
+                        error: function (error) {
+                            alert(error);
+                        }
+                    })
+                })
+            })
+
+            function getAllBooks() {
+                $.ajax({
+                    url: "/mybookstore/webresources/book",
+                    method: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        var tableBody = $('#tblBook tbody');
+                        tableBody.empty();
+                        $(data).each(function (index, element) {
+                            tableBody.append('<tr><td>' + element.title + '</td><td>' + element.author + '</td><td><button onclick = "deleteBook(' + element.id + ')">Delete</button></td></tr>');
+                        })
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                })
+            }
+
+            function deleteBook(id) {
+                $.ajax({
+                    url: "/mybookstore/webresources/book/" + id,
+                    method: "DELETE",
+                    success: function () {
+                        alert('record has been deleted');
+                        getAllBooks();
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                })
+            }
+
+            function reset() {
+                $('#txtTitle').val('');
+                $('#txtAuthor').val('');
+            }
+        </script>
+    </head>
+    <body>
+       
+        <div id="jsf">
+            <a href= "/mybookstore/index.xhtml"/>go to jsf crud page</a>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td>Title</td>
+                    <td><input type="text" id = "txtTitle"></td>
+                </tr>
+                <tr>
+                    <td>Author</td>
+                    <td><input type="text" id = "txtAuthor"></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><input type="button" value="Add Book" id="btnAddBook"></td>
+                </tr>
+            </table>
+            <table border = "1" id = "tblBook">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
